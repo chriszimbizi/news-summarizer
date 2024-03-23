@@ -1,0 +1,4 @@
+data/.env
+logs
+images
+venv
