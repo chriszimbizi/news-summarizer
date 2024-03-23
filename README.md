@@ -44,7 +44,7 @@ The Streamlit interface will open in your default web browser. Enter a topic of 
 
 ### Screenshot
 
-![Screenshot of Streamlit news summarizer interface](images/desktop.jpg)
+<img alt="Screenshot of Streamlit news summarizer interface" src="https://github.com/chriszimbizi/news-summarizer/assets/121321293/a89a2e68-3483-48ac-a02c-baf7d68b539b" width="400">
 
 ### Acknowledgments
 
