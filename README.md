@@ -11,7 +11,7 @@ Before running the project, make sure to set up the environment variables for `N
 1. Clone the repository:
 
 ```
-git clone https://github.com/your_username/your_repository.git
+git clone https://github.com/chriszimbizi/news-summarizer.git
 ```
 
 2. Navigate to the project directory:
