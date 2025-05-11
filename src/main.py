@@ -288,8 +288,9 @@ class AssistantManager:
                 output = get_news(topic=arguments["topic"])
                 print(f"News on {arguments['topic']}: {output}")
                 final_str = ""
-                for item in output:
-                    final_str += "".join(item)
+                if output:
+                    for item in output:
+                        final_str += "".join(item)
 
                 tool_outputs.append(
                     {
@@ -301,32 +302,33 @@ class AssistantManager:
                 raise ValueError(f"Function {function_name} not found.")
 
             print("Submitting outputs back to Assistant...")
-            self.client.beta.threads.runs.submit_tool_outputs(
-                run_id=self.run.id,
-                thread_id=self.thread.id,
-                tool_outputs=tool_outputs,
-            )
+            if self.thread:
+                self.client.beta.threads.runs.submit_tool_outputs(
+                    run_id=self.run.id,
+                    thread_id=self.thread.id,
+                    tool_outputs=tool_outputs,
+                )
 
     def wait_for_completion(self):
         """
-        Wait for the Assistant to complete.
+        Wait for the Run to complete.
         """
         if self.thread and self.run:
             while True:
                 time.sleep(5)
-                run_status = self.client.beta.threads.runs.retrieve(
+                run = self.client.beta.threads.runs.retrieve(
                     thread_id=self.thread.id,
                     run_id=self.run.id,
                 )
-                print(f"RUN STATUS: {run_status.model_dump_json(indent=4)}")
+                print(f"RUN STATUS: {run.model_dump_json(indent=4)}")
 
-                if run_status.status == "completed":
+                if run.status == "completed":
                     self.process_message()
                     break
-                elif run_status.status == "requires_action":
+                elif run.required_action:
                     print("FUNCTION CALLING NOW...")
                     self.call_required_functions(
-                        required_actions=run_status.required_action.submit_tool_outputs.model_dump()
+                        required_actions=run.required_action.submit_tool_outputs.model_dump()
                     )
 
     def get_summary(self) -> str | None:
